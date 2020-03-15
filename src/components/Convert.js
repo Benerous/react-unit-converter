@@ -11,16 +11,16 @@ export default class Convert extends Component {
     }
 
     render() {
-        const { physicalQuantityNumber, units, unitsSymbols, length} = this.props;
+        const { physicalQuantityNumber, units, unitsSymbols, value } = this.props;
         const i = +units;
         return (
             <div>
                 <input 
-                    type="text" 
+                    type="number" 
                     onChange={this.handleChange} 
                     className="md-form form-control my-md-2 my-3" 
                     placeholder={unitsSymbols[physicalQuantityNumber][i]}
-                    value={length} 
+                    value={value} 
                 />
             </div>
         );

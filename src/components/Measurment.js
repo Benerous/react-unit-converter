@@ -8,7 +8,6 @@ export default class Measurment extends Component {
                 <div className="row">
                     <div className="col-12 text-center">
                         <select value={physicalQuantityNumber} onChange={selectPhysicalQuantityNumber.bind(this)} className="mdb-select md-form form-control my-md-2 my-3">
-                            {/* <option disabled value="default">Select Measurment</option> */}
                             {physicalQuantities.map((item, index) => {
 			                    return <option key={index} value={index}>{item}</option>;
 		                        })

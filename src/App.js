@@ -8,6 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 class App extends Component {
   constructor(props) {
     super(props);
+
+    //Length
+
     this.handleMillimetersChange = this.handleMillimetersChange.bind(this);
     this.handleCentimetersChange = this.handleCentimetersChange.bind(this);
     this.handleMetersChange = this.handleMetersChange.bind(this);
@@ -15,33 +18,44 @@ class App extends Component {
     this.handleInchesChange = this.handleInchesChange.bind(this);
     this.handleFeetsChange = this.handleFeetsChange.bind(this);
     this.handleMilesChange = this.handleMilesChange.bind(this);
+
+    // Temperature
+
+    this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+    this.handleKelvinChange = this.handleKelvinChange.bind(this);
+    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+    this.handleRankineChange = this.handleRankineChange.bind(this);
+
     this.state = {
       physicalQuantityNumber: 0,
       firstUnit: 0,
       secondUnit: 0,
-      physicalQuantities: ["Length"], // ["Length", "Mass", "Temperature", "Time", "Area"],
+      physicalQuantities: ["Length", "Temperature"], // ["Length", "Temperature", "Mass", "Time", "Area"],
       measurmentUnits: [
         ["Millimeters", "Centimeters", "Meters", "Kilometers", "Inches", "Feet", "Miles"],
+        ["degrees Celsius", "degrees Kelvin", "degrees Fahrenheit", "degrees Rankine"],
         // ["Micrograms", "Milligrams", "Grams", "Kilograms", "Pounds", "Tons"],
-        // ["degrees Celsius", "degrees Kelvin", "degrees Fahrenheit", "degrees Rankine"],
         // ["Nanoseconds", "Microseconds", "Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Months", "Years"],
         // ["Square Millimeters", "Square Centimeters", "Square Meters", "Hectares", "Square Kilometers", "Square Inches", "Square Feet", "Square Miles"]
       ],
       unitsSymbols: [
         ["mm", "cm", "m", "km", "inch", "ft", "mi"],
+        ["C", "K", "F", "R"],
         // ["mcg", "mg", "g", "kg", "lb", "t"],
-        // ["C", "K", "F", "R"],
         // ["ns", "mcs", "ms", "sec", "min", "hour", "day", "week", "month", "year"],
         // ["mm2", "cm2", "m2", "ha2", "km2", "inch2", "ft2", "mi2"]
       ],
-      length: '',
-      scale: 'mm'
+      value: '',
+      scale: ''
     };
   };
 
   selectPhysicalQuantityNumber = (e) => {
     this.setState({
       physicalQuantityNumber: +(e.target.value),
+      value: '',
+      firstUnit: 0,
+      secondUnit: 0
     });
     e.preventDefault();
   };
@@ -49,6 +63,7 @@ class App extends Component {
   selectFirstPhysicalQuantity = (e) => {
     this.setState({
       firstUnit: +(e.target.value),
+      value: ''
     });
     e.preventDefault();
   };
@@ -56,33 +71,34 @@ class App extends Component {
   selectSecondPhysicalQuantity = (e) => {
     this.setState({
       secondUnit: +(e.target.value),
+      value: ''
     });
     e.preventDefault();
   };
 
+  // Length
 
-  handleMillimetersChange(length) {
-    this.setState({scale: "mm", length});
+  handleMillimetersChange(value) {
+    this.setState({scale: "mm", value});
   };
-  handleCentimetersChange(length) {
-    this.setState({scale: "cm", length});
+  handleCentimetersChange(value) {
+    this.setState({scale: "cm", value});
   };
-  handleMetersChange(length) {
-    this.setState({scale: "m", length});
+  handleMetersChange(value) {
+    this.setState({scale: "m", value});
   };
-  handleKilometersChange(length) {
-    this.setState({scale: "km", length});
+  handleKilometersChange(value) {
+    this.setState({scale: "km", value});
   };
-  handleInchesChange(length) {
-    this.setState({scale: "inch", length});
+  handleInchesChange(value) {
+    this.setState({scale: "inch", value});
   };
-  handleFeetsChange(length) {
-    this.setState({scale: "ft", length});
+  handleFeetsChange(value) {
+    this.setState({scale: "ft", value});
   };
-  handleMilesChange(length) {
-    this.setState({scale: "mi", length});
+  handleMilesChange(value) {
+    this.setState({scale: "mi", value});
   };
-
   toMm = (x, y) => {
     switch (true) {
       case x === "cm":
@@ -210,78 +226,168 @@ class App extends Component {
     };
   };
 
+  //Temperature
+
+  handleCelsiusChange(value) {
+    this.setState({scale: "C", value});
+  };
+  handleKelvinChange(value) {
+    this.setState({scale: "K", value});
+  };
+  handleFahrenheitChange(value) {
+    this.setState({scale: "F", value});
+  };
+  handleRankineChange(value) {
+    this.setState({scale: "R", value});
+  };
+  toC = (x, y) => {
+    switch (true) {
+      case x === "K":
+        return y - 273.15;
+      case x === "F":
+        return (y - 32) * 5/9;
+      case x === "R":
+        return (y - 491.67) * 5/9;
+      default: 
+        return y;
+    };
+  };
+  toK = (x, y) => {
+    switch (true) {
+      case x === "C":
+        return y + 273.15;
+      case x === "F":
+        return y + 254.92;
+      case x === "R":
+        return y * 0.5555;
+      default: 
+        return y;
+    };
+  };
+  toF = (x, y) => {
+    switch (true) {
+      case x === "C":
+        return (y * 1.8) + 32;
+      case x === "K":
+        return y - 459.87;
+      case x === "R":
+        return y + 459.67;
+      default: 
+        return y;
+    };
+  };
+  toR = (x, y) => {
+    switch (true) {
+      case x === "C":
+        return (y + 273.15) * 9/5;
+      case x === "K":
+        return y * 9/5;
+      case x === "F":
+        return y + 459.67;
+      default: 
+        return y;
+    };
+  };
+
+  //General Convertization
+
   tryConvert = (measurment, unit, convert) => {
     const input = parseFloat(measurment);
     if (Number.isNaN(input)) {
       return '';
     }
     const output = convert(unit, input);
-    const rounded = Math.round(output * 1000) / 1000;
+    const rounded = Math.round(output * 1000000) / 1000000;
     return rounded.toString();
   };
 
   render() {
     const scale = this.state.scale;
-    const length = this.state.length;
+    const value = this.state.value;
     const tempOne = this.state.unitsSymbols[this.state.physicalQuantityNumber][this.state.firstUnit];
     const tempTwo = this.state.unitsSymbols[this.state.physicalQuantityNumber][this.state.secondUnit];
 
+    // Length
+
     const millimeters = 
-      scale === "cm" ? this.tryConvert(length, "cm", this.toMm) : 
-      scale === "m" ? this.tryConvert(length, "m", this.toMm) :
-      scale === "km" ? this.tryConvert(length, "km", this.toMm) :
-      scale === "inch" ? this.tryConvert(length, "inch", this.toMm) :
-      scale === "ft" ? this.tryConvert(length, "ft", this.toMm) :
-      scale === "mi" ? this.tryConvert(length, "mi", this.toMm) :
-      length;;
+      scale === "cm" ? this.tryConvert(value, "cm", this.toMm) : 
+      scale === "m" ? this.tryConvert(value, "m", this.toMm) :
+      scale === "km" ? this.tryConvert(value, "km", this.toMm) :
+      scale === "inch" ? this.tryConvert(value, "inch", this.toMm) :
+      scale === "ft" ? this.tryConvert(value, "ft", this.toMm) :
+      scale === "mi" ? this.tryConvert(value, "mi", this.toMm) :
+      value;;
     const centimeters =
-      scale === "mm" ? this.tryConvert(length, "mm", this.toCm) : 
-      scale === "m" ? this.tryConvert(length, "m", this.toCm) :
-      scale === "km" ? this.tryConvert(length, "km", this.toCm) :
-      scale === "inch" ? this.tryConvert(length, "inch", this.toCm) :
-      scale === "ft" ? this.tryConvert(length, "ft", this.toCm) :
-      scale === "mi" ? this.tryConvert(length, "mi", this.toCm) :
-      length;
+      scale === "mm" ? this.tryConvert(value, "mm", this.toCm) : 
+      scale === "m" ? this.tryConvert(value, "m", this.toCm) :
+      scale === "km" ? this.tryConvert(value, "km", this.toCm) :
+      scale === "inch" ? this.tryConvert(value, "inch", this.toCm) :
+      scale === "ft" ? this.tryConvert(value, "ft", this.toCm) :
+      scale === "mi" ? this.tryConvert(value, "mi", this.toCm) :
+      value;
     const meters =
-      scale === "mm" ? this.tryConvert(length, "mm", this.toM) : 
-      scale === "cm" ? this.tryConvert(length, "cm", this.toM) :
-      scale === "km" ? this.tryConvert(length, "km", this.toM) :
-      scale === "inch" ? this.tryConvert(length, "inch", this.toM) :
-      scale === "ft" ? this.tryConvert(length, "ft", this.toM) :
-      scale === "mi" ? this.tryConvert(length, "mi", this.toM) :
-      length;
+      scale === "mm" ? this.tryConvert(value, "mm", this.toM) : 
+      scale === "cm" ? this.tryConvert(value, "cm", this.toM) :
+      scale === "km" ? this.tryConvert(value, "km", this.toM) :
+      scale === "inch" ? this.tryConvert(value, "inch", this.toM) :
+      scale === "ft" ? this.tryConvert(value, "ft", this.toM) :
+      scale === "mi" ? this.tryConvert(value, "mi", this.toM) :
+      value;
     const kilometers =
-      scale === "mm" ? this.tryConvert(length, "mm", this.toKm) : 
-      scale === "cm" ? this.tryConvert(length, "cm", this.toKm) :
-      scale === "m" ? this.tryConvert(length, "m", this.toKm) :
-      scale === "inch" ? this.tryConvert(length, "inch", this.toKm) :
-      scale === "ft" ? this.tryConvert(length, "ft", this.toKm) :
-      scale === "mi" ? this.tryConvert(length, "mi", this.toKm) :
-      length;
+      scale === "mm" ? this.tryConvert(value, "mm", this.toKm) : 
+      scale === "cm" ? this.tryConvert(value, "cm", this.toKm) :
+      scale === "m" ? this.tryConvert(value, "m", this.toKm) :
+      scale === "inch" ? this.tryConvert(value, "inch", this.toKm) :
+      scale === "ft" ? this.tryConvert(value, "ft", this.toKm) :
+      scale === "mi" ? this.tryConvert(value, "mi", this.toKm) :
+      value;
     const inches =
-      scale === "mm" ? this.tryConvert(length, "mm", this.toInch) : 
-      scale === "cm" ? this.tryConvert(length, "cm", this.toInch) :
-      scale === "m" ? this.tryConvert(length, "m", this.toInch) :
-      scale === "km" ? this.tryConvert(length, "km", this.toInch) :
-      scale === "ft" ? this.tryConvert(length, "ft", this.toInch) :
-      scale === "mi" ? this.tryConvert(length, "mi", this.toInch) :
-      length;
+      scale === "mm" ? this.tryConvert(value, "mm", this.toInch) : 
+      scale === "cm" ? this.tryConvert(value, "cm", this.toInch) :
+      scale === "m" ? this.tryConvert(value, "m", this.toInch) :
+      scale === "km" ? this.tryConvert(value, "km", this.toInch) :
+      scale === "ft" ? this.tryConvert(value, "ft", this.toInch) :
+      scale === "mi" ? this.tryConvert(value, "mi", this.toInch) :
+      value;
     const feets =
-      scale === "mm" ? this.tryConvert(length, "mm", this.toFt) : 
-      scale === "cm" ? this.tryConvert(length, "cm", this.toFt) :
-      scale === "m" ? this.tryConvert(length, "m", this.toFt) :
-      scale === "km" ? this.tryConvert(length, "km", this.toFt) :
-      scale === "inch" ? this.tryConvert(length, "inch", this.toFt) :
-      scale === "mi" ? this.tryConvert(length, "mi", this.toFt) :
-      length;
+      scale === "mm" ? this.tryConvert(value, "mm", this.toFt) : 
+      scale === "cm" ? this.tryConvert(value, "cm", this.toFt) :
+      scale === "m" ? this.tryConvert(value, "m", this.toFt) :
+      scale === "km" ? this.tryConvert(value, "km", this.toFt) :
+      scale === "inch" ? this.tryConvert(value, "inch", this.toFt) :
+      scale === "mi" ? this.tryConvert(value, "mi", this.toFt) :
+      value;
     const miles =
-      scale === "mm" ? this.tryConvert(length, "mm", this.toMi) : 
-      scale === "cm" ? this.tryConvert(length, "cm", this.toMi) :
-      scale === "m" ? this.tryConvert(length, "m", this.toMi) :
-      scale === "km" ? this.tryConvert(length, "km", this.toMi) :
-      scale === "inch" ? this.tryConvert(length, "inch", this.toMi) :
-      scale === "ft" ? this.tryConvert(length, "ft", this.toMi) :
-      length;
+      scale === "mm" ? this.tryConvert(value, "mm", this.toMi) : 
+      scale === "cm" ? this.tryConvert(value, "cm", this.toMi) :
+      scale === "m" ? this.tryConvert(value, "m", this.toMi) :
+      scale === "km" ? this.tryConvert(value, "km", this.toMi) :
+      scale === "inch" ? this.tryConvert(value, "inch", this.toMi) :
+      scale === "ft" ? this.tryConvert(value, "ft", this.toMi) :
+      value;
+
+    // Temperature
+
+    const celsius = 
+      scale === "K" ? this.tryConvert(value, "K", this.toC) :
+      scale === "F" ? this.tryConvert(value, "F", this.toC) :
+      scale === "R" ? this.tryConvert(value, "R", this.toC) :
+      value;
+    const kelvin = 
+      scale === "C" ? this.tryConvert(value, "C", this.toK) :
+      scale === "F" ? this.tryConvert(value, "F", this.toK) :
+      scale === "R" ? this.tryConvert(value, "R", this.toK) :
+      value;
+    const fahrenheit = 
+      scale === "C" ? this.tryConvert(value, "C", this.toF) :
+      scale === "K" ? this.tryConvert(value, "K", this.toF) :
+      scale === "R" ? this.tryConvert(value, "R", this.toF) :
+      value;
+    const rankine = 
+      scale === "C" ? this.tryConvert(value, "C", this.toR) :
+      scale === "K" ? this.tryConvert(value, "K", this.toR) :
+      scale === "F" ? this.tryConvert(value, "F", this.toR) :
+      value;
 
     return (
       <div className="App">
@@ -293,7 +399,7 @@ class App extends Component {
         <Quantity 
           physicalQuantityNumber={this.state.physicalQuantityNumber}
           firstUnit={this.state.firstUnit}
-          secondUnit={this.state.value2}
+          secondUnit={this.state.secondUnit}
           measurmentUnits={this.state.measurmentUnits}
           selectFirstPhysicalQuantity={this.selectFirstPhysicalQuantity}
           selectSecondPhysicalQuantity={this.selectSecondPhysicalQuantity}
@@ -306,15 +412,19 @@ class App extends Component {
                 physicalQuantityNumber={this.state.physicalQuantityNumber}
                 measurmentUnits={this.state.measurmentUnits}
                 unitsSymbols={this.state.unitsSymbols}
-                length={
+                value={
                   tempOne === "mm" ? millimeters : 
                   tempOne === "cm" ? centimeters : 
                   tempOne === "m" ? meters : 
                   tempOne === "km" ? kilometers :
                   tempOne === "inch" ? inches :
                   tempOne === "ft" ? feets :
-                  tempOne === "mi" ? miles :
-                  millimeters}
+                  tempOne === "mi" ? miles : 
+                  tempOne === "C" ? celsius :
+                  tempOne === "K" ? kelvin :
+                  tempOne === "F" ? fahrenheit :
+                  tempOne === "R" ? rankine :
+                  undefined}
                 tryConvert={
                   tempOne === "mm" ? this.handleMillimetersChange : 
                   tempOne === "cm" ? this.handleCentimetersChange : 
@@ -323,7 +433,11 @@ class App extends Component {
                   tempOne === "inch" ? this.handleInchesChange :
                   tempOne === "ft" ? this.handleFeetsChange :
                   tempOne === "mi" ? this.handleMilesChange :
-                  millimeters}
+                  tempOne === "C" ? this.handleCelsiusChange :
+                  tempOne === "K" ? this.handleKelvinChange :
+                  tempOne === "F" ? this.handleFahrenheitChange :
+                  tempOne === "R" ? this.handleRankineChange :
+                  undefined}
               />
             </div>
             <div className="col-6 text-center">
@@ -332,7 +446,7 @@ class App extends Component {
                 physicalQuantityNumber={this.state.physicalQuantityNumber}
                 measurmentUnits={this.state.measurmentUnits}
                 unitsSymbols={this.state.unitsSymbols}
-                length={
+                value={
                   tempTwo === "mm" ? millimeters : 
                   tempTwo === "cm" ? centimeters : 
                   tempTwo === "m" ? meters : 
@@ -340,7 +454,11 @@ class App extends Component {
                   tempTwo === "inch" ? inches :
                   tempTwo === "ft" ? feets :
                   tempTwo === "mi" ? miles :
-                  millimeters}
+                  tempTwo === "C" ? celsius :
+                  tempTwo === "K" ? kelvin :
+                  tempTwo === "F" ? fahrenheit :
+                  tempTwo === "R" ? rankine :
+                  undefined}
                 tryConvert={
                   tempTwo === "mm" ? this.handleMillimetersChange : 
                   tempTwo === "cm" ? this.handleCentimetersChange : 
@@ -349,7 +467,11 @@ class App extends Component {
                   tempTwo === "inch" ? this.handleInchesChange :
                   tempTwo === "ft" ? this.handleFeetsChange :
                   tempTwo === "mi" ? this.handleMilesChange :
-                  millimeters}
+                  tempTwo === "C" ? this.handleCelsiusChange :
+                  tempTwo === "K" ? this.handleKelvinChange :
+                  tempTwo === "F" ? this.handleFahrenheitChange :
+                  tempTwo === "R" ? this.handleRankineChange :
+                  undefined}
               />
             </div>
           </div>
