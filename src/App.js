@@ -26,22 +26,31 @@ class App extends Component {
     this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
     this.handleRankineChange = this.handleRankineChange.bind(this);
 
+    // Mass
+
+    this.handleMicrogramsChange = this.handleMicrogramsChange.bind(this);
+    this.handleMilligramsChange = this.handleMilligramsChange.bind(this);
+    this.handleGramsChange = this.handleGramsChange.bind(this);
+    this.handleKilogramsChange = this.handleKilogramsChange.bind(this);
+    this.handlePoundsChange = this.handlePoundsChange.bind(this);
+    this.handleTonsChange = this.handleTonsChange.bind(this);
+
     this.state = {
       physicalQuantityNumber: 0,
       firstUnit: 0,
       secondUnit: 0,
-      physicalQuantities: ["Length", "Temperature"], // ["Length", "Temperature", "Mass", "Time", "Area"],
+      physicalQuantities: ["Length", "Temperature", "Mass"], // ["Length", "Temperature", "Mass", "Time", "Area"],
       measurmentUnits: [
         ["Millimeters", "Centimeters", "Meters", "Kilometers", "Inches", "Feet", "Miles"],
         ["degrees Celsius", "degrees Kelvin", "degrees Fahrenheit", "degrees Rankine"],
-        // ["Micrograms", "Milligrams", "Grams", "Kilograms", "Pounds", "Tons"],
+        ["Micrograms", "Milligrams", "Grams", "Kilograms", "Pounds", "Tons"],
         // ["Nanoseconds", "Microseconds", "Milliseconds", "Seconds", "Minutes", "Hours", "Days", "Weeks", "Months", "Years"],
         // ["Square Millimeters", "Square Centimeters", "Square Meters", "Hectares", "Square Kilometers", "Square Inches", "Square Feet", "Square Miles"]
       ],
       unitsSymbols: [
         ["mm", "cm", "m", "km", "inch", "ft", "mi"],
         ["C", "K", "F", "R"],
-        // ["mcg", "mg", "g", "kg", "lb", "t"],
+        ["mcg", "mg", "g", "kg", "lb", "t"],
         // ["ns", "mcs", "ms", "sec", "min", "hour", "day", "week", "month", "year"],
         // ["mm2", "cm2", "m2", "ha2", "km2", "inch2", "ft2", "mi2"]
       ],
@@ -288,6 +297,123 @@ class App extends Component {
         return y;
     };
   };
+  
+  // Mass
+
+  handleMicrogramsChange(value) {
+    this.setState({scale: "mcg", value});
+  };
+  handleMilligramsChange(value) {
+    this.setState({scale: "mg", value});
+  };
+  handleGramsChange(value) {
+    this.setState({scale: "g", value});
+  };
+  handleKilogramsChange(value) {
+    this.setState({scale: "kg", value});
+  };
+  handlePoundsChange(value) {
+    this.setState({scale: "lb", value});
+  };
+  handleTonsChange(value) {
+    this.setState({scale: "t", value});
+  };
+  toMcg = (x, y) => {
+    switch (true) {
+      case x === "mg":
+        return y * 1000;
+      case x === "g":
+        return y * 1000000;
+      case x === "kg":
+        return y * 1000000000;
+      case x === "lb":
+        return y * 453592370;
+      case x === "t":
+        return y * 1000000000000;
+      default: 
+        return y;
+    };
+  };
+  toMg = (x, y) => {
+    switch (true) {
+      case x === "mcg":
+        return y * 0.001;
+      case x === "g":
+        return y * 1000;
+      case x === "kg":
+        return y * 1000000;
+      case x === "lb":
+        return y * 453592.37;      
+      case x === "t":
+        return y * 1000000000;     
+      default: 
+        return y;
+    };
+  };
+  toG = (x, y) => {
+    switch (true) {
+      case x === "mcg":
+        return y * 0.000001;
+      case x === "mg":
+        return y * 0.001;
+      case x === "kg":
+        return y * 1000;
+      case x === "lb":
+        return y * 453.5923;
+      case x === "t":
+        return y * 1000000;
+      default: 
+        return y;
+    };
+  };
+  toKg = (x, y) => {
+    switch (true) {
+      case x === "mcg":
+        return y * 0.000000001;
+      case x === "mg":
+        return y * 0.000001;
+      case x === "g":
+        return y * 0.001;
+      case x === "lb":
+        return y * 0.4535;
+      case x === "t":
+        return y * 1000;
+      default: 
+        return y;
+    };
+  };
+  toLb = (x, y) => {
+    switch (true) {
+      case x === "mcg":
+        return y * 2.2 * 0.000000001;
+      case x === "mg":
+        return y * 2.2 * 0.000001;
+      case x === "g":
+        return y * 0.0022;
+      case x === "kg":
+        return y * 2.2046;
+      case x === "t":
+        return y * 2204.6226;
+      default: 
+        return y;
+    };
+  };
+  toT = (x, y) => {
+    switch (true) {
+      case x === "mcg":
+        return y * 0.000000000001;
+      case x === "mg":
+        return y * 0.000000001;
+      case x === "g":
+        return y * 0.000001;
+      case x === "kg":
+        return y * 0.001;
+      case x === "lb":
+        return y * 0.000453;
+      default: 
+        return y;
+    };
+  };
 
   //General Convertization
 
@@ -316,7 +442,7 @@ class App extends Component {
       scale === "inch" ? this.tryConvert(value, "inch", this.toMm) :
       scale === "ft" ? this.tryConvert(value, "ft", this.toMm) :
       scale === "mi" ? this.tryConvert(value, "mi", this.toMm) :
-      value;;
+      value;
     const centimeters =
       scale === "mm" ? this.tryConvert(value, "mm", this.toCm) : 
       scale === "m" ? this.tryConvert(value, "m", this.toCm) :
@@ -389,6 +515,56 @@ class App extends Component {
       scale === "F" ? this.tryConvert(value, "F", this.toR) :
       value;
 
+    // Mass
+
+    const micrograms = 
+      scale === "mg" ? this.tryConvert(value, "mg", this.toMcg) : 
+      scale === "g" ? this.tryConvert(value, "g", this.toMcg) :
+      scale === "kg" ? this.tryConvert(value, "kg", this.toMcg) :
+      scale === "lb" ? this.tryConvert(value, "lb", this.toMcg) :
+      scale === "t" ? this.tryConvert(value, "t", this.toMcg) :
+      value;
+
+    const milligrams = 
+      scale === "mcg" ? this.tryConvert(value, "mcg", this.toMg) : 
+      scale === "g" ? this.tryConvert(value, "g", this.toMg) :
+      scale === "kg" ? this.tryConvert(value, "kg", this.toMg) :
+      scale === "lb" ? this.tryConvert(value, "lb", this.toMg) :
+      scale === "t" ? this.tryConvert(value, "t", this.toMg) :
+      value;
+
+    const grams = 
+      scale === "mcg" ? this.tryConvert(value, "mcg", this.toG) : 
+      scale === "mg" ? this.tryConvert(value, "mg", this.toG) :
+      scale === "kg" ? this.tryConvert(value, "kg", this.toG) :
+      scale === "lb" ? this.tryConvert(value, "lb", this.toG) :
+      scale === "t" ? this.tryConvert(value, "t", this.toG) :
+      value;
+
+    const kilograms = 
+      scale === "mcg" ? this.tryConvert(value, "mcg", this.toKg) : 
+      scale === "mg" ? this.tryConvert(value, "mg", this.toKg) :
+      scale === "g" ? this.tryConvert(value, "g", this.toKg) :
+      scale === "lb" ? this.tryConvert(value, "lb", this.toKg) :
+      scale === "t" ? this.tryConvert(value, "t", this.toKg) :
+      value;
+
+    const pounds = 
+      scale === "mcg" ? this.tryConvert(value, "mcg", this.toLb) : 
+      scale === "mg" ? this.tryConvert(value, "mg", this.toLb) :
+      scale === "g" ? this.tryConvert(value, "g", this.toLb) :
+      scale === "kg" ? this.tryConvert(value, "kg", this.toLb) :
+      scale === "t" ? this.tryConvert(value, "t", this.toLb) :
+      value;
+
+    const tons = 
+      scale === "mcg" ? this.tryConvert(value, "mcg", this.toT) : 
+      scale === "mg" ? this.tryConvert(value, "mg", this.toT) :
+      scale === "g" ? this.tryConvert(value, "g", this.toT) :
+      scale === "kg" ? this.tryConvert(value, "kg", this.toT) :
+      scale === "lb" ? this.tryConvert(value, "lb", this.toT) :
+      value;
+    
     return (
       <div className="App">
         <Measurment 
@@ -424,6 +600,12 @@ class App extends Component {
                   tempOne === "K" ? kelvin :
                   tempOne === "F" ? fahrenheit :
                   tempOne === "R" ? rankine :
+                  tempOne === "mcg" ? micrograms :
+                  tempOne === "mg" ? milligrams : 
+                  tempOne === "g" ? grams :
+                  tempOne === "kg" ? kilograms :
+                  tempOne === "lb" ? pounds :
+                  tempOne === "t" ? tons :
                   undefined}
                 tryConvert={
                   tempOne === "mm" ? this.handleMillimetersChange : 
@@ -437,6 +619,12 @@ class App extends Component {
                   tempOne === "K" ? this.handleKelvinChange :
                   tempOne === "F" ? this.handleFahrenheitChange :
                   tempOne === "R" ? this.handleRankineChange :
+                  tempOne === "mcg" ? this.handleMicrogramsChange :
+                  tempOne === "mg" ? this.handleMilligramsChange :
+                  tempOne === "g" ? this.handleGramsChange :
+                  tempOne === "kg" ? this.handleKilogramsChange :
+                  tempOne === "lb" ? this.handlePoundsChange :
+                  tempOne === "t" ? this.handleTonsChange :
                   undefined}
               />
             </div>
@@ -458,6 +646,12 @@ class App extends Component {
                   tempTwo === "K" ? kelvin :
                   tempTwo === "F" ? fahrenheit :
                   tempTwo === "R" ? rankine :
+                  tempTwo === "mcg" ? micrograms :
+                  tempTwo === "mg" ? milligrams : 
+                  tempTwo === "g" ? grams :
+                  tempTwo === "kg" ? kilograms :
+                  tempTwo === "lb" ? pounds :
+                  tempTwo === "t" ? tons :
                   undefined}
                 tryConvert={
                   tempTwo === "mm" ? this.handleMillimetersChange : 
@@ -471,6 +665,12 @@ class App extends Component {
                   tempTwo === "K" ? this.handleKelvinChange :
                   tempTwo === "F" ? this.handleFahrenheitChange :
                   tempTwo === "R" ? this.handleRankineChange :
+                  tempTwo === "mcg" ? this.handleMicrogramsChange :
+                  tempTwo === "mg" ? this.handleMilligramsChange :
+                  tempTwo === "g" ? this.handleGramsChange :
+                  tempTwo === "kg" ? this.handleKilogramsChange :
+                  tempTwo === "lb" ? this.handlePoundsChange :
+                  tempTwo === "t" ? this.handleTonsChange :
                   undefined}
               />
             </div>
